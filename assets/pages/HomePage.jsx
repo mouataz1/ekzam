@@ -12,7 +12,7 @@ const HomePage = (props) => {
                                 <div className="row g-0">
                                     <div className="col-md-4">
 
-                                        <img className="card-img card-img-left" src="{{ asset('template_assets/assets/img//elements/12.jpg') }}"
+                                        <img className="card-img card-img-left" src={require('/public/template_assets/assets/img/elements/12.jpg')}
                                              alt="Card image"/>
                                     </div>
                                     <div className="col-md-8">
@@ -46,7 +46,7 @@ const HomePage = (props) => {
                                         </div>
                                     </div>
                                     <div className="col-md-4">
-                                        <img className="card-img card-img-right" src="../assets/img/elements/17.jpg"
+                                        <img className="card-img card-img-right" src={require('/public/template_assets/assets/img/elements/17.jpg')}
                                              alt="Card image"/>
                                     </div>
                                 </div>

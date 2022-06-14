@@ -29,7 +29,7 @@ import Modules from "./pages/Modules";
 
 AuthAPI.setup();
 const PrivateRoute = ({path, isAuthenticated, component}) =>
-    isAuthenticated ? <Route path={path} component={component}/>
+    isAuthenticated ? <Route exact path={path} component={component}/>
         : <Redirect to="/login"/>
 
 
@@ -52,9 +52,9 @@ const App = () => {
                     <div className="layout-page">
                         <NavBarwithRouter isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
                         <div className="content-wrapper">
+                            <PrivateRoute path="/" isAuthenticated={isAuthenticated} component={HomePage} />
                             <PrivateRoute path="/exams" isAuthenticated={isAuthenticated} component={Examens} />
                             <PrivateRoute path="/questions" isAuthenticated={isAuthenticated} component={Questions} />
-                            <PrivateRoute path="/" isAuthenticated={isAuthenticated} component={HomePage} />
                             <PrivateRoute path="/modules" isAuthenticated={isAuthenticated} component={Modules} />
 
                             <Footer/>
