@@ -25,6 +25,7 @@ import Login from "./pages/Login";
 import AuthAPI from "./services/AuthAPI";
 import authAPI from "./services/AuthAPI";
 import Redirect from "react-router-dom/es/Redirect";
+import Modules from "./pages/Modules";
 
 AuthAPI.setup();
 const PrivateRoute = ({path, isAuthenticated, component}) =>
@@ -54,6 +55,8 @@ const App = () => {
                             <PrivateRoute path="/exams" isAuthenticated={isAuthenticated} component={Examens} />
                             <PrivateRoute path="/questions" isAuthenticated={isAuthenticated} component={Questions} />
                             <PrivateRoute path="/" isAuthenticated={isAuthenticated} component={HomePage} />
+                            <PrivateRoute path="/modules" isAuthenticated={isAuthenticated} component={Modules} />
+
                             <Footer/>
                         </div>
                     </div>

@@ -29,7 +29,7 @@ const Examens = (props) => {
                         <tbody className="table-border-bottom-0">
                         {exam.map(ex =>
                             <tr key={ex.id}>
-                                <td><i className="fab fa-angular fa-lg text-danger me-3"/> <strong>{ex.code}</strong>
+                                <td><i className="fab fa-angular fa-lg text-danger me-3"/> <strong> Exam-{ex.code}</strong>
                                 </td>
                                 <td>
                                     <div className="dropdown">
