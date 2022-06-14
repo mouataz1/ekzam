@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import AuthAPI from "../services/AuthAPI";
 
-const Login = ({onLogin}) => {
-
+const Login = ({onLogin, history}) => {
     const [credentials, setCredentials] = useState({
         username: "",
         password: ""
@@ -24,6 +23,7 @@ const Login = ({onLogin}) => {
         await AuthAPI.authenticate(credentials);
         setError("");
         onLogin(true);
+        history.replace("/")
 
         }catch (error){
             setError("Informations incorrect !!")

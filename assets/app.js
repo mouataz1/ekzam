@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import  ReactDom from "react-dom";
-import {HashRouter, Switch, Route} from "react-router-dom";
+import {HashRouter, Switch, Route, withRouter} from "react-router-dom";
 
 /*
  * Welcome to your app's main JavaScript file!
@@ -24,30 +24,36 @@ import Examens from "./pages/Examens";
 import Login from "./pages/Login";
 import AuthAPI from "./services/AuthAPI";
 import authAPI from "./services/AuthAPI";
+import Redirect from "react-router-dom/es/Redirect";
 
 AuthAPI.setup();
+const PrivateRoute = ({path, isAuthenticated, component}) =>
+    isAuthenticated ? <Route path={path} component={component}/>
+        : <Redirect to="/login"/>
+
+
 const App = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
     console.warn(isAuthenticated);
+
+    const NavBarwithRouter = withRouter(Navbar);
     return (
         <HashRouter>
             <Switch>
                 <Route path="/login"
                        render={(props) =>
-                           <Login onLogin={setIsAuthenticated} />}
+                           <Login onLogin={setIsAuthenticated} {...props} />}
                 />
             <div className="layout-wrapper layout-content-navbar">
                 <div className="layout-container">
                     <Sidebar isAuthenticated = {isAuthenticated} />
                     <div className="layout-page">
-                        <Navbar isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
+                        <NavBarwithRouter isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
                         <div className="content-wrapper">
-
-                                <Route path="/questions" component={Questions}/>
-                                <Route path="/exams" component={Examens}/>
-                                <Route exact path="/" component={HomePage}/>
-
+                            <PrivateRoute path="/exams" isAuthenticated={isAuthenticated} component={Examens} />
+                            <PrivateRoute path="/questions" isAuthenticated={isAuthenticated} component={Questions} />
+                            <PrivateRoute path="/" isAuthenticated={isAuthenticated} component={HomePage} />
                             <Footer/>
                         </div>
                     </div>
