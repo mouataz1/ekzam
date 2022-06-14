@@ -26,10 +26,12 @@ import AuthAPI from "./services/AuthAPI";
 import authAPI from "./services/AuthAPI";
 import Redirect from "react-router-dom/es/Redirect";
 import Modules from "./pages/Modules";
+import Profile from "./pages/Profile";
+import Teachers from "./pages/Teachers";
 
 AuthAPI.setup();
 const PrivateRoute = ({path, isAuthenticated, component}) =>
-    isAuthenticated ? <Route path={path} component={component}/>
+    isAuthenticated ? <Route exact path={path} component={component}/>
         : <Redirect to="/login"/>
 
 
@@ -52,11 +54,12 @@ const App = () => {
                     <div className="layout-page">
                         <NavBarwithRouter isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
                         <div className="content-wrapper">
+                            <PrivateRoute path="/"  isAuthenticated={isAuthenticated} component={HomePage} />
+                            <PrivateRoute path="/profile"  isAuthenticated={isAuthenticated} component={Profile} />
                             <PrivateRoute path="/exams" isAuthenticated={isAuthenticated} component={Examens} />
                             <PrivateRoute path="/questions" isAuthenticated={isAuthenticated} component={Questions} />
-                            <PrivateRoute path="/" isAuthenticated={isAuthenticated} component={HomePage} />
                             <PrivateRoute path="/modules" isAuthenticated={isAuthenticated} component={Modules} />
-
+                            <PrivateRoute path="/teachers" isAuthenticated={isAuthenticated} component={Teachers} />
                             <Footer/>
                         </div>
                     </div>
