@@ -4228,6 +4228,11 @@
     "picocolors" "^1.0.0"
     "stable" "^0.1.8"
 
+"sweetalert2@^11.4.17":
+  "integrity" "sha512-z0iQW5fDdvtoDNle3iHTKunsuNWgPaMifVu0GPtdguR0uVPrvg9gg9bnSQeJ4tx3C7FwJOEnRshxrs6fFItRvw=="
+  "resolved" "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.4.17.tgz"
+  "version" "11.4.17"
+
 "sync-rpc@^1.3.6":
   "integrity" "sha512-J8jTXuZzRlvU7HemDgHi3pGnh/rkoqR/OZSjhTyyZrEkkYQbk7Z33AXp37mkPfPpfdOuj7Ex3H/TJM1z48uPQw=="
   "resolved" "https://registry.npmjs.org/sync-rpc/-/sync-rpc-1.3.6.tgz"

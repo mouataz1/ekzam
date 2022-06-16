@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Field from "../components/forms/Field";
+import Swal from 'sweetalert2'
+
 
 
 const Modules = (props) => {
@@ -14,13 +16,12 @@ const Modules = (props) => {
     })
     /************ajout de module**********/
     const  [postModule, setPostModule] = useState({
-        nom: "",
+        name: "",
         description: ""
     });
     // errors
     const [errors, setErrors] = useState({
-        nom: "le nom est obligatoire!!",
-
+        name: "le name est obligatoire!!",
         description: "le contenue de module est obligatoire!!"
     });
     const handleChange = ({currentTarget}) =>{
@@ -31,13 +32,53 @@ const Modules = (props) => {
         event.preventDefault();
         try {
             const response =  await axios.post("http://127.0.0.1:8000/api/modules", postModule)
+            Swal.fire({
+                icon:'success',
+                title: 'Module '+postModule.name+' Enregistré avec succès',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                },
+                showConfirmButton: true,
+            })
             $('#addmodal').modal('toggle');
+            console.log(response.data)
         }catch (error){
-            console.log(error.response.data.violations)
+            console.log(error.response)
         }
     }
     function deleteM(id)
     {
+        Swal.fire({
+            title: 'avertissement !!',
+            text: "vous etes sure de supprimer ce module",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'oui, supprimer!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const token = window.localStorage.getItem("authToken");
+                fetch(`http://localhost:8000/api/modules/${id}`,{
+                    method:'DELETE',
+                    headers : {
+                        'Accept': 'application/json',
+                        'Authorization': "Bearer "+ token
+                    }
+                }).then((res)=>
+                    res.json().then((response)=>
+                        console.log(response))
+                )
+                Swal.fire(
+                    ' Module Supprimé!',
+                    'ce module est supprimé avec succés',
+                    'success'
+                )
+            }
+        })
         const token = window.localStorage.getItem("authToken");
         fetch(`http://localhost:8000/api/modules/${id}`,{
             method:'DELETE',
@@ -91,36 +132,48 @@ const Modules = (props) => {
               </div>
           </div>
           {/*modal add*/}
-          <div className="modal fade" id="addmodal"  aria-hidden="true">
-              <div className="modal-dialog modal-dialog-centered" role="document">
-                  <div className="modal-content">
-                      <div className="modal-header">
-                          <h5 className="modal-title" id="modalCenterTitle">Ajout de module</h5>
-                          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <div class="modal fade" id="addmodal" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="modalCenterTitle">Nouveau module</h5>
+                          <button
+                              type="button"
+                              class="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close">
+
                           </button>
                       </div>
                       <form onSubmit={handleSubmit}>
-                          <div className="modal-body">
-                              <Field label="Nom Module" name="nom_module"
-                                     placeholder="Entrez le nom de module"
-                                     value={postModule.nom}
-                                     onChange={handleChange} error={errors.nom}/>
-                              <Field
-                                  label="Description Module"
-                                  name="description_module"
-                                  type="text"
-                                  placeholder="Contenu de module"
-                                  error="vérifier le formulaire"
-                                  value={postModule.description}
-                                  onChange={handleChange}
-                                  error={errors.description}
-                              />
+                          <div class="modal-body">
+                              <div class="row">
+                                  <Field
+                                      name="name"
+                                      label="Nom de module"
+                                      placeholder="Module-exemple"
+                                      value={postModule.name}
+                                      onChange={handleChange}
+                                      error={errors.name}
+                                  />
+                              </div>
+                              <div className="row">
+
+                                  <Field
+                                      name="description"
+                                      label="Description"
+                                      placeholder="Contenu de module"
+                                      value={postModule.description}
+                                      onChange={handleChange}
+                                      error={errors.description}
+                                  />
+                              </div>
                           </div>
-                          <div className="modal-footer">
-                              <button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal">
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                   Close
                               </button>
-                              <button type="submit" className="btn btn-primary">Enregistrer</button>
+                              <button type="submit" class="btn btn-primary">Ajouter</button>
                           </div>
                       </form>
                   </div>
