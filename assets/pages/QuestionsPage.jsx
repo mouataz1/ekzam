@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import Link from "react-router-dom/es/Link";
+import Field from "../components/forms/Field";
 
 const Questions = (props) => {
     const [question,setquestion]= useState([]);
@@ -8,11 +10,45 @@ const Questions = (props) => {
             .then(response=>response.data['hydra:member'])
             .then(data=>setquestion(data))
             .catch(error=>console.log(error.response));
-    })
+    });
+
+    const  [postQuestion, setPostQuestion] = useState({
+        code: "",
+        dificulty: "",
+        description: ""
+    });
+
+    const [errors, setErrors] = useState({
+        code: "le code est obligatoire!!",
+        dificulty: "la complexité est obligatoire!!",
+        description: "le contenue de la question et obligatoire!!"
+    });
+
+    const handleChange = ({currentTarget}) =>{
+        const {name, value} = currentTarget;
+        setPostQuestion ({...postQuestion, [name]: value});
+    };
+
+    const handleSubmit = async (event) =>{
+        event.preventDefault();
+        try {
+           const response =  await axios.post("http://127.0.0.1:8000/api/questions", postQuestion)
+            $('#addmodal').modal('toggle');
+            console.log(response.data);
+        }catch (error){
+            console.log(error.response)
+        }
+    }
+
+
     return(
+
         <div className="container-xxl flex-grow-1 container-p-y">
             <div className="card">
-                <h5 className="card-header">Table Basic</h5>
+                <h5 className="card-header d-flex justify-content-between align-items-center">Toutes les questions
+                    <button className="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#addmodal">Nouvel question</button>
+                </h5>
+
                 <div className="table-responsive text-nowrap">
                     <table className="table mb-5 p-5">
                         <thead>
@@ -49,6 +85,63 @@ const Questions = (props) => {
                     </table>
                 </div>
             </div>
+            {/*modal add*/}
+            <div class="modal fade" id="addmodal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Nouvel question</h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div class="modal-body">
+
+                                <div class="row g-2">
+                                    <Field
+                                        name="code"
+                                        label="Code de question"
+                                        placeholder="code de la question"
+                                        value={postQuestion.code}
+                                        onChange={handleChange}
+                                        error={errors.code}
+                                    />
+                                    <Field
+                                        name="dificulty"
+                                        label="Dificulté"
+                                        placeholder="HARD, EASY, MEDIUM"
+                                        value={postQuestion.dificulty}
+                                        onChange={handleChange}
+                                        error={errors.dificulty}
+                                    />
+                                </div>
+                                <div className="row">
+                                    <Field
+                                        name="description"
+                                        label="Question"
+                                        placeholder="la question ?"
+                                        value={postQuestion.description}
+                                        onChange={handleChange}
+                                        error={errors.description}
+                                    />
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Close
+                                </button>
+                                <button type="submit" class="btn btn-primary">Ajouter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {/*end modal add*/}
         </div>
     );
 

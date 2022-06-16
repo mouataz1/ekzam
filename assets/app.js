@@ -29,6 +29,9 @@ import Modules from "./pages/Modules";
 import Profile from "./pages/Profile";
 import Teachers from "./pages/Teachers";
 
+import AuthContext from "./contexts/AuthContext";
+import Question from "./pages/Question";
+
 AuthAPI.setup();
 const PrivateRoute = ({path, isAuthenticated, component}) =>
     isAuthenticated ? <Route exact path={path} component={component}/>
@@ -41,7 +44,14 @@ const App = () => {
     console.warn(isAuthenticated);
 
     const NavBarwithRouter = withRouter(Navbar);
+
+    const contextValue = {
+        isAuthenticated,
+         setIsAuthenticated
+    }
+
     return (
+        <AuthContext.Provider value={contextValue}>
         <HashRouter>
             <Switch>
                 <Route path="/login"
@@ -57,7 +67,9 @@ const App = () => {
                             <PrivateRoute path="/"  isAuthenticated={isAuthenticated} component={HomePage} />
                             <PrivateRoute path="/profile"  isAuthenticated={isAuthenticated} component={Profile} />
                             <PrivateRoute path="/exams" isAuthenticated={isAuthenticated} component={Examens} />
+                            <PrivateRoute path="/questions/:id" isAuthenticated={isAuthenticated} component={Question}/>
                             <PrivateRoute path="/questions" isAuthenticated={isAuthenticated} component={Questions} />
+
                             <PrivateRoute path="/modules" isAuthenticated={isAuthenticated} component={Modules} />
                             <PrivateRoute path="/teachers" isAuthenticated={isAuthenticated} component={Teachers} />
                             <Footer/>
@@ -67,6 +79,7 @@ const App = () => {
             </div>
 </Switch>
         </HashRouter>
+        </AuthContext.Provider>
     );
 
 }
