@@ -38,7 +38,20 @@ const Questions = (props) => {
             console.log(error.response.data.violations)
         }
     }
-
+    function deleteq(id)
+    {
+        const token = window.localStorage.getItem("authToken");
+        fetch(`http://localhost:8000/api/questions/${id}`,{
+            method:'DELETE',
+            headers : {
+                'Accept': 'application/json',
+                'Authorization': "Bearer "+ token
+            }
+        }).then((res)=>
+            res.json().then((response)=>
+                console.log(response))
+        )
+    }
 
     return(
 
@@ -72,7 +85,7 @@ const Questions = (props) => {
                                         <div className="row ">
                                             <button type="button" className="col btn btn-outline-success m-2">Show</button>
                                             <button type="button" className="col btn btn-outline-warning m-2">Edit</button>
-                                            <button type="button" className="col btn btn-outline-danger m-2">Delete</button>
+                                            <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteq(q.id)}>Delete</button>
                                         </div>
                                     </div>
                                 </td>
@@ -89,13 +102,14 @@ const Questions = (props) => {
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalCenterTitle">Nouvel question</h5>
+                            <h5 class="modal-title" id="modalCenterTitle">Nouvelle question</h5>
                             <button
                                 type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal"
-                                aria-label="Close"
-                            ></button>
+                                aria-label="Close">
+
+                            </button>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div class="modal-body">
