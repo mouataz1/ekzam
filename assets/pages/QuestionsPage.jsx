@@ -4,15 +4,23 @@ import Link from "react-router-dom/es/Link";
 import Field from "../components/forms/Field";
 import {toast} from "react-toastify";
 
-const Questions = (props) => {
+const  Questions = (props) => {
     console.log(props);
     const [question,setquestion]= useState([]);
-    useEffect(()=>{
+
+
+    const fetchData =  ()=>{
         axios.get("http://127.0.0.1:8000/api/questions")
             .then(response=>response.data['hydra:member'])
             .then(data=>setquestion(data))
+
             .catch(error=>console.log(error.response));
-    });
+    };
+
+   useEffect(   ()=>{
+
+       fetchData();
+    },[]);
 
     const  [postQuestion, setPostQuestion] = useState({
         code: "",
@@ -36,7 +44,11 @@ const Questions = (props) => {
         try {
            const response =  await axios.post("http://127.0.0.1:8000/api/questions", postQuestion)
             $('#addmodal').modal('toggle');
+
+            //call fetchData function here !!
+            fetchData();
            toast.success("Question ajouté avec succes 😁");
+
         }catch (error){
             console.log(error.response)
         }
@@ -54,6 +66,8 @@ const Questions = (props) => {
             res.json().then((response)=>
                 console.log(response))
         )
+        fetchData();
+        toast.success("Question suprimé avec success 🗑");
     }
 
     return(
@@ -87,7 +101,7 @@ const Questions = (props) => {
                                     <div className="dropdown">
                                         <div className="row ">
                                             <button type="button" className="col btn btn-outline-success m-2">Show</button>
-                                            <button type="button" className="col btn btn-outline-warning m-2">Edit</button>
+                                            <button type="button" className="col btn btn-outline-warning m-2" data-bs-toggle="modal" data-bs-target="#editmodal" >Edit</button>
                                             <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteq(q.id)}>Delete</button>
                                         </div>
                                     </div>
@@ -158,6 +172,66 @@ const Questions = (props) => {
                 </div>
             </div>
             {/*end modal add*/}
+
+
+            {/*modal edit*/}
+            <div class="modal fade" id="editmodal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Nouvelle question</h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+
+                            </button>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div class="modal-body">
+
+                                <div class="row g-2">
+                                    <Field
+                                        name="code"
+                                        label="Code de question"
+                                        placeholder="code de la question"
+                                        value={postQuestion.code}
+                                        onChange={handleChange}
+                                        error={errors.code}
+                                    />
+                                    <Field
+                                        name="dificulty"
+                                        label="Dificulté"
+                                        placeholder="HARD, EASY, MEDIUM"
+                                        value={postQuestion.dificulty}
+                                        onChange={handleChange}
+                                        error={errors.dificulty}
+                                    />
+                                </div>
+                                <div className="row">
+                                    <Field
+                                        name="description"
+                                        label="Question"
+                                        placeholder="la question ?"
+                                        value={postQuestion.description}
+                                        onChange={handleChange}
+                                        error={errors.description}
+                                    />
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Close
+                                </button>
+                                <button type="submit" class="btn btn-primary">Ajouter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {/*end modal edit*/}
         </div>
     );
 
