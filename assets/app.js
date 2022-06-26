@@ -31,6 +31,9 @@ import Teachers from "./pages/Teachers";
 
 import AuthContext from "./contexts/AuthContext";
 import Question from "./pages/Question";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 AuthAPI.setup();
 const PrivateRoute = ({path, isAuthenticated, component}) =>
@@ -54,14 +57,17 @@ const App = () => {
         <AuthContext.Provider value={contextValue}>
         <HashRouter>
             <Switch>
+
                 <Route path="/login"
                        render={(props) =>
                            <Login onLogin={setIsAuthenticated} {...props} />}
                 />
             <div className="layout-wrapper layout-content-navbar">
+
                 <div className="layout-container">
                     <Sidebar isAuthenticated = {isAuthenticated} />
                     <div className="layout-page">
+
                         <NavBarwithRouter isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
                         <div className="content-wrapper">
                             <PrivateRoute path="/"  isAuthenticated={isAuthenticated} component={HomePage} />
@@ -79,6 +85,7 @@ const App = () => {
             </div>
 </Switch>
         </HashRouter>
+            <ToastContainer position={toast.POSITION.BOTTOM_LEFT}/>
         </AuthContext.Provider>
     );
 

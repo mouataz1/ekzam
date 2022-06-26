@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import AuthAPI from "../services/AuthAPI";
+import {toast} from "react-toastify";
 
 const Login = ({onLogin, history}) => {
     const [credentials, setCredentials] = useState({
@@ -23,11 +24,13 @@ const Login = ({onLogin, history}) => {
         await AuthAPI.authenticate(credentials);
         setError("");
         onLogin(true);
+        toast.success("Vous étes désormais connecté 😄");
         history.replace("/")
 
         }catch (error){
             setError("Informations incorrect !!")
         }
+       // toast.error("une erreur est survenue 😕");
     }
     return(
 
@@ -66,7 +69,7 @@ const Login = ({onLogin, history}) => {
                             id="path-5"
                         />
                       </defs>
-                      <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <g id="g-app-brand" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                         <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
                           <g id="Icon" transform="translate(27.000000, 15.000000)">
                             <g id="Mask" transform="translate(0.000000, 8.000000)">
@@ -76,11 +79,11 @@ const Login = ({onLogin, history}) => {
                               <use fill="#696cff" xlinkHref="#path-1"/>
                               <g id="Path-3" mask="url(#mask-2)">
                                 <use fill="#696cff" xlinkHref="#path-3"/>
-                                <use fill-opacity="0.2" fill="#FFFFFF" xlinkHref="#path-3"/>
+                                <use fillOpacity="0.2" fill="#FFFFFF" xlinkHref="#path-3"/>
                               </g>
                               <g id="Path-4" mask="url(#mask-2)">
                                 <use fill="#696cff" xlinkHref="#path-4"/>
-                                <use fill-opacity="0.2" fill="#FFFFFF" xlinkHref="#path-4"/>
+                                <use fillOpacity="0.2" fill="#FFFFFF" xlinkHref="#path-4"/>
                               </g>
                             </g>
                             <g
@@ -88,7 +91,7 @@ const Login = ({onLogin, history}) => {
                                 transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) "
                             >
                               <use fill="#696cff" xlinkHref="#path-5"/>
-                              <use fill-opacity="0.2" fill="#FFFFFF" xlinkHref="#path-5"/>
+                              <use fillOpacity="0.2" fill="#FFFFFF" xlinkHref="#path-5"/>
                             </g>
                           </g>
                         </g>

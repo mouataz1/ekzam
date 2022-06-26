@@ -2,8 +2,10 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Link from "react-router-dom/es/Link";
 import Field from "../components/forms/Field";
+import {toast} from "react-toastify";
 
 const Questions = (props) => {
+    console.log(props);
     const [question,setquestion]= useState([]);
     useEffect(()=>{
         axios.get("http://127.0.0.1:8000/api/questions")
@@ -34,8 +36,9 @@ const Questions = (props) => {
         try {
            const response =  await axios.post("http://127.0.0.1:8000/api/questions", postQuestion)
             $('#addmodal').modal('toggle');
+           toast.success("Question ajouté avec succes 😁");
         }catch (error){
-            console.log(error.response.data.violations)
+            console.log(error.response)
         }
     }
 
