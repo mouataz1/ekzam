@@ -23,34 +23,34 @@ const Sidebar= (props) => {
                 <li className="menu-item">
                     <NavLink to="/" className="menu-link">
                         <i className="menu-icon tf-icons bx bx-home-circle"></i>
-                        <div data-i18n="Analytics">Dashboard</div>
+                        <div data-i18n="Layouts">Dashboard</div>
                     </NavLink>
                 </li>
-                <li className="menu-item open">
+                <li className="menu-item ">
                     <NavLink to="/profile" className="menu-link">
                         <i className="menu-icon tf-icons bx bx-user"></i>
-                        <div data-i18n="Layoutss">Profile</div>
+                        <div data-i18n="Layouts">Profile</div>
                     </NavLink>
                 </li>
-                <li className="menu-item  open">
+                <li className="menu-item ">
                     <NavLink to="/modules" className=" menu-link">
                         <i className="menu-icon tf-icons bx bx-folder-open"></i>
                         <div data-i18n="Layouts">Modules</div>
                     </NavLink>
                 </li>
-                <li className="menu-item  open">
+                <li className="menu-item ">
                     <NavLink to="/questions" className=" menu-link">
                         <i className="menu-icon tf-icons bx bx-question-mark"></i>
                         <div data-i18n="Layouts">Questions</div>
                     </NavLink>
                 </li>
-                <li className="menu-item  open">
+                <li className="menu-item  ">
                     <NavLink to="/exams" className=" menu-link">
                         <i className="menu-icon tf-icons bx bx-clipboard"></i>
                         <div data-i18n="Layouts">Exams</div>
                     </NavLink>
                 </li>
-                <li className="menu-item  open">
+                <li className="menu-item ">
                     <NavLink to="/teachers" className=" menu-link">
                         <i className="menu-icon tf-icons bx bx-user-voice"></i>
                         <div data-i18n="Layouts">Teachers</div>
