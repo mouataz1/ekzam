@@ -56,7 +56,6 @@ const Teachers = () => {
                               class="btn-close"
                               data-bs-dismiss="modal"
                               aria-label="Close">
-
                           </button>
                       </div>
                       <form onSubmit="">
@@ -86,7 +85,7 @@ const Teachers = () => {
                                   <div className="mb-3">
                                       <label htmlFor="exampleFormControlSelect1" className="form-label">Module</label>
                                       <select className="form-select" id="moduleQuestion"
-                                              aria-label="Default select example">
+                                              aria-label="Default select example" name="teacher">
                                           <option selected>Sélectionnez un module</option>
                                           <option value="1">Symfony</option>
                                           <option value="2">Laravel</option>
