@@ -76,7 +76,7 @@ const Modules = (props) => {
         }
     }
     /*****************************************************/
-    function deleteM(id)
+    const deleteM =(id) =>
     {
         const token = window.localStorage.getItem("authToken");
         try {
