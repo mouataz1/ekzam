@@ -69,7 +69,7 @@ const  Questions = (props) => {
         fetchData();
         toast.success("Question suprimé avec success 🗑");
     }
-
+    
     return(
 
         <div className="container-xxl flex-grow-1 container-p-y">
@@ -100,9 +100,9 @@ const  Questions = (props) => {
                                 <td>
                                     <div className="dropdown">
                                         <div className="row ">
-                                            <button type="button" className="col btn btn-outline-success m-2">Show</button>
-                                            <button type="button" className="col btn btn-outline-warning m-2" data-bs-toggle="modal" data-bs-target="#editmodal" >Edit</button>
-                                            <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteq(q.id)}>Delete</button>
+                                            <button type="button" className="col btn btn-outline-success m-2">Afficher</button>
+                                            <button type="button" className="col btn btn-outline-warning m-2" data-bs-toggle="modal" data-bs-target="#editmodal" >Modifier</button>
+                                            <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteq(q.id)}>Suprimer</button>
                                         </div>
                                     </div>
                                 </td>
