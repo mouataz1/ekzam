@@ -3,74 +3,54 @@ import React from "react";
 const HomePage = (props) => {
     return(
         <div className="container-xxl flex-grow-1 container-p-y">
-
             <div className="layout-demo-wrapper">
                 <div className="layout-demo-placeholder">
-                    <div className="row mb-5">
-                        <div className="col-md">
-                            <div className="card mb-3">
-                                <div className="row g-0">
-                                    <div className="col-md-4">
-
-                                        <img className="card-img card-img-left" src={require('/public/template_assets/assets/img/elements/12.jpg')}
-                                             alt="Card image"/>
-                                    </div>
-                                    <div className="col-md-8">
-                                        <div className="card-body">
-                                            <h5 className="card-title">Card title</h5>
-                                            <p className="card-text">
-                                                This is a wider card with supporting text below as a natural lead-in to
-                                                additional content.
-                                                This content is a little bit longer.
-                                            </p>
-                                            <p className="card-text"><small className="text-muted">Last updated 3 mins
-                                                ago</small></p>
+                    <div className="row col-12">
+                        <div className="col-sm-6 mb-3">
+                            <div className="card text-center">
+                                <div className="card-body">
+                                    <div className="card-title">
+                                        <div className=" mb-3 text-center">
+                                            <i className="bx bxs-folder-open bx-lg text-center"></i>
                                         </div>
                                     </div>
+                                    <h1> 4 modules</h1>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md">
-                            <div className="card mb-3">
-                                <div className="row g-0">
-                                    <div className="col-md-8">
-                                        <div className="card-body">
-                                            <h5 className="card-title">Card title</h5>
-                                            <p className="card-text">
-                                                This is a wider card with supporting text below as a natural lead-in to
-                                                additional content.
-                                                This content is a little bit longer.
-                                            </p>
-                                            <p className="card-text"><small className="text-muted">Last updated 3 mins
-                                                ago</small></p>
+                        <div className="col-sm-6 mb-3">
+                            <div className="card text-center">
+                                <div className="card-body">
+                                    <div className="card-title">
+                                        <div className=" mb-3 text-center">
+                                            <i className="bx bx-question-mark bx-lg text-center"></i>
                                         </div>
                                     </div>
-                                    <div className="col-md-4">
-                                        <img className="card-img card-img-right" src={require('/public/template_assets/assets/img/elements/17.jpg')}
-                                             alt="Card image"/>
-                                    </div>
+                                    <h1> 5 Questions </h1>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md">
-                            <div className="card mb-3">
-                                <div className="row g-0">
-                                    <div className="col-md-8">
-                                        <div className="card-body">
-                                            <h5 className="card-title">Card title</h5>
-                                            <p className="card-text">
-                                                This is a wider card with supporting text below as a natural lead-in to
-                                                additional content.
-                                                This content is a little bit longer.
-                                            </p>
-                                            <p className="card-text"><small className="text-muted">Last updated 3 mins
-                                                ago</small></p>
+                        <div className="col-sm-6 mb-3">
+                            <div className="card text-center">
+                                <div className="card-body">
+                                    <div className="card-title">
+                                        <div className=" mb-3 text-center">
+                                            <i className="bx bx-clipboard bx-lg text-center"></i>
                                         </div>
                                     </div>
-                                    <div className="col-md-4">
-                                        <img className="card-img card-img-right" src="../assets/img/elements/17.jpg"
-                                             alt="Card image"/>
+                                    <h1> 3 exams </h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-sm-6 mb-3">
+                            <div className="card text-center">
+                                <div className="card-body">
+                                    <div className="card-title">
+                                        <div className=" mb-3 text-center">
+                                            <i className="bx bx-user-voice bx-lg text-center"></i>
+                                        </div>
                                     </div>
+                                    <h1> 1 Teachers </h1>
                                 </div>
                             </div>
                         </div>

@@ -32,17 +32,6 @@ const Modules = (props) => {
         event.preventDefault();
         try {
             const response =  await axios.post("http://127.0.0.1:8000/api/modules", postModule)
-            Swal.fire({
-                icon:'success',
-                title: 'Module '+postModule.name+' Enregistré avec succès',
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                },
-                showConfirmButton: true,
-            })
             $('#addmodal').modal('toggle');
             console.log(response.data)
         }catch (error){
@@ -51,34 +40,6 @@ const Modules = (props) => {
     }
     function deleteM(id)
     {
-        Swal.fire({
-            title: 'avertissement !!',
-            text: "vous etes sure de supprimer ce module",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'oui, supprimer!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const token = window.localStorage.getItem("authToken");
-                fetch(`http://localhost:8000/api/modules/${id}`,{
-                    method:'DELETE',
-                    headers : {
-                        'Accept': 'application/json',
-                        'Authorization': "Bearer "+ token
-                    }
-                }).then((res)=>
-                    res.json().then((response)=>
-                        console.log(response))
-                )
-                Swal.fire(
-                    ' Module Supprimé!',
-                    'ce module est supprimé avec succés',
-                    'success'
-                )
-            }
-        })
         const token = window.localStorage.getItem("authToken");
         fetch(`http://localhost:8000/api/modules/${id}`,{
             method:'DELETE',
@@ -119,7 +80,7 @@ const Modules = (props) => {
                               <td>
                                   <div className="dropdown">
                                       <div className="row ">
-                                          <button type="button" className="col btn btn-outline-success m-2">Show</button>
+                                          <button type="button" className="col btn btn-outline-success m-2" data-bs-toggle="modal" data-bs-target="#showModal">Show</button>
                                           <button type="button" className="col btn btn-outline-warning m-2">Edit</button>
                                           <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteM(m.id)}>Delete</button>
                                       </div>
@@ -179,7 +140,39 @@ const Modules = (props) => {
                   </div>
               </div>
           </div>
+
           {/*end modal add*/}
+
+          {modules.map(m =>
+              <div class="modal fade" id="showModal" data-bs-backdrop="static" tabindex="-1">
+                  <div class="modal-dialog">
+                      <form class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="showModal">Numero de module : 6</h5>
+                              <button
+                                  type="button"
+                                  class="btn-close"
+                                  data-bs-dismiss="modal"
+                                  aria-label="Close">
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                              <div className="card text-center mb-3">
+                                  <div className="card-body">
+                                      <h1 className="card-title">Symfony</h1>
+                                      <p className="card-text">framework Php</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                  Close
+                              </button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          )}
       </div>
   )
 }

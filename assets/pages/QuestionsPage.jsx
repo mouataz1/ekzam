@@ -74,8 +74,8 @@ const  Questions = (props) => {
 
         <div className="container-xxl flex-grow-1 container-p-y">
             <div className="card">
-                <h5 className="card-header d-flex justify-content-between align-items-center">Toutes les questions
-                    <button className="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#addmodal">Nouvel question</button>
+                <h5 className="card-header d-flex justify-content-between align-items-center">Les Questions
+                    <button className="btn btn-primary " data-bs-toggle="modal" data-bs-target="#addmodal"><i className='bx bxs-plus-circle'></i></button>
                 </h5>
 
                 <div className="table-responsive text-nowrap">
@@ -85,6 +85,7 @@ const  Questions = (props) => {
                             <th>Numero</th>
                             <th>Question</th>
                             <th>Dificulty</th>
+                            <th>Module</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -97,19 +98,17 @@ const  Questions = (props) => {
                                 <td>
                                     <span className="badge bg-label-danger me-1">{q.dificulty}</span>
                                 </td>
+                                <td>Symfony</td>
                                 <td>
                                     <div className="dropdown">
                                         <div className="row ">
-                                            <button type="button" className="col btn btn-outline-success m-2">Afficher</button>
-                                            <button type="button" className="col btn btn-outline-warning m-2" data-bs-toggle="modal" data-bs-target="#editmodal" >Modifier</button>
-                                            <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteq(q.id)}>Suprimer</button>
+                                            <button type="button" className="col btn btn-outline-warning m-2">Edit</button>
+                                            <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteq(q.id)}>Delete</button>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
-
                         )}
-
                         </tbody>
                     </table>
                 </div>
@@ -158,6 +157,18 @@ const  Questions = (props) => {
                                         onChange={handleChange}
                                         error={errors.description}
                                     />
+                                </div>
+                                <div className="row">
+                                    <div className="mb-3">
+                                        <label htmlFor="exampleFormControlSelect1" className="form-label">Module</label>
+                                        <select className="form-select" id="moduleQuestion"
+                                                aria-label="Default select example">
+                                            <option selected>Sélectionnez un module</option>
+                                            <option value="1">Symfony</option>
+                                            <option value="2">Laravel</option>
+                                            <option value="3">React</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                             </div>

@@ -8,7 +8,7 @@ const Profile = () => {
                 <div className="card-body">
                     <div className="d-flex align-items-start align-items-sm-center gap-4">
                         <img
-                            src="../assets/img/avatars/1.png"
+                            src={require('/public/template_assets/assets/img/avatars/1.png')}
                             alt="user-avatar"
                             className="d-block rounded"
                             height="100"
@@ -27,10 +27,7 @@ const Profile = () => {
                                     accept="image/png, image/jpeg"
                                 />
                             </label>
-                            <button type="button" className="btn btn-outline-secondary account-image-reset mb-4">
-                                <i className="bx bx-reset d-block d-sm-none"/>
-                                <span className="d-none d-sm-block">Reset</span>
-                            </button>
+
 
                             <p className="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
                         </div>
@@ -41,19 +38,18 @@ const Profile = () => {
                     <form id="formAccountSettings" method="POST" onSubmit="return false">
                         <div className="row">
                             <div className="mb-3 col-md-6">
-                                <label htmlFor="firstName" className="form-label">First Name</label>
+                                <label htmlFor="firstName" className="form-label">Full Name</label>
                                 <input
                                     className="form-control"
                                     type="text"
                                     id="firstName"
                                     name="firstName"
-                                    value="John"
                                     autoFocus
                                 />
                             </div>
                             <div className="mb-3 col-md-6">
-                                <label htmlFor="lastName" className="form-label">Last Name</label>
-                                <input className="form-control" type="text" name="lastName" id="lastName" value="Doe"/>
+                                <label htmlFor="Module" className="form-label">Module</label>
+                                <input className="form-control" type="text" name="Module" id="Module" />
                             </div>
                             <div className="mb-3 col-md-6">
                                 <label htmlFor="email" className="form-label">E-mail</label>
@@ -62,7 +58,6 @@ const Profile = () => {
                                     type="text"
                                     id="email"
                                     name="email"
-                                    value="john.doe@example.com"
                                     placeholder="john.doe@example.com"
                                 />
                             </div>
@@ -70,7 +65,7 @@ const Profile = () => {
                             <div className="mb-3 col-md-6">
                                 <label className="form-label" htmlFor="phoneNumber">Phone Number</label>
                                 <div className="input-group input-group-merge">
-                                    <span className="input-group-text">US (+1)</span>
+
                                     <input
                                         type="text"
                                         id="phoneNumber"
@@ -97,7 +92,7 @@ const Profile = () => {
                                     type="text"
                                     id="password"
                                     name="email"
-                                    value=""
+
                                     placeholder="New password"
                                 />
                             </div>
