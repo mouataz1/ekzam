@@ -38,6 +38,40 @@ const Modules = (props) => {
             console.log(error.response)
         }
     }
+
+    /*****************************************************/
+
+    /*************edit module*****************************/
+    const [EditModule, setEditModule]=useState({
+        id:"",
+        name:"",
+        description:""
+    });
+    const changeOnclick = (id,name,desc)=>
+    {
+        setEditModule({
+            id:id,
+            name:name,
+            description:desc
+        })
+    }
+    const handleEditchange = ({currentTarget})=>{
+        const {name,value}=currentTarget;
+        setEditModule({...EditModule,[name]:value});
+    }
+    const handleEditSubmit = async (event)=>{
+        event.preventDefault();
+        let id = EditModule.id;
+        try {
+            const response= await axios.put("http://127.0.0.1:8000/api/modules/"+id,EditModule)
+            alert("module updated succesfully");
+            $('#editmodal').modal('toggle');
+        }catch (error)
+        {
+            alert("erreur est survenue");
+        }
+    }
+    /*****************************************************/
     function deleteM(id)
     {
         const token = window.localStorage.getItem("authToken");
@@ -81,7 +115,7 @@ const Modules = (props) => {
                                   <div className="dropdown">
                                       <div className="row ">
                                           <button type="button" className="col btn btn-outline-success m-2" data-bs-toggle="modal" data-bs-target="#showModal">Show</button>
-                                          <button type="button" className="col btn btn-outline-warning m-2">Edit</button>
+                                          <button type="button" className="col btn btn-outline-warning m-2" data-bs-toggle="modal" data-bs-target="#editmodal" onClick={()=>changeOnclick(m.id,m.name,m.description)} >Edit</button>
                                           <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteM(m.id)}>Delete</button>
                                       </div>
                                   </div>
@@ -140,8 +174,57 @@ const Modules = (props) => {
                   </div>
               </div>
           </div>
-
           {/*end modal add*/}
+
+          {/*edit modal */}
+          <div className="modal fade" id="editmodal" tabIndex="-1" aria-hidden="true">
+              <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                      <div className="modal-header">
+                          <h5 className="modal-title" id="modalCenterTitle">Modifier module {EditModule.id}</h5>
+                          <button
+                              type="button"
+                              className="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close">
+                          </button>
+                      </div>
+                      <form onSubmit={handleEditSubmit}>
+                          <div className="modal-body">
+                              <input type="hidden" name={EditModule.id} value={EditModule.id}/>
+                              <div className="row">
+                                  <Field
+                                      name="name"
+                                      label="Nom de module"
+                                      placeholder="Module-exemple"
+                                      value={EditModule.name}
+                                      onChange={handleEditchange}
+                                      error={errors.name}
+                                  />
+                              </div>
+                              <div className="row">
+
+                                  <Field
+                                      name="description"
+                                      label="Description"
+                                      placeholder="Contenu de module"
+                                      value={EditModule.description}
+                                      onChange={handleEditchange}
+                                      error={errors.description}
+                                  />
+                              </div>
+                          </div>
+                          <div className="modal-footer">
+                              <button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                  Close
+                              </button>
+                              <button type="submit" className="btn btn-primary">Modifier</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+          {/*end edit modal*/}
 
           {modules.map(m =>
               <div class="modal fade" id="showModal" data-bs-backdrop="static" tabindex="-1">
