@@ -74,10 +74,23 @@ class Module
      */
     private $teacher;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Question::class, mappedBy="module")
+     * @Groups({"questions_read"})
+     */
+    private $questions;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Exam::class, mappedBy="module")
+     */
+    private $exams;
+
     public function __construct()
     {
         $this->niveaux = new ArrayCollection();
         $this->teacher = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->exams = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,6 +172,66 @@ class Module
     public function removeTeacher(User $teacher): self
     {
         $this->teacher->removeElement($teacher);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Question>
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Question $question): self
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions[] = $question;
+            $question->setModule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $question): self
+    {
+        if ($this->questions->removeElement($question)) {
+            // set the owning side to null (unless already changed)
+            if ($question->getModule() === $this) {
+                $question->setModule(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exam>
+     */
+    public function getExams(): Collection
+    {
+        return $this->exams;
+    }
+
+    public function addExam(Exam $exam): self
+    {
+        if (!$this->exams->contains($exam)) {
+            $this->exams[] = $exam;
+            $exam->setModule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExam(Exam $exam): self
+    {
+        if ($this->exams->removeElement($exam)) {
+            // set the owning side to null (unless already changed)
+            if ($exam->getModule() === $this) {
+                $exam->setModule(null);
+            }
+        }
 
         return $this;
     }

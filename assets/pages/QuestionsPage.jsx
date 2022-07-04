@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 const  Questions = (props) => {
     console.log(props);
     const [question,setquestion]= useState([]);
+    const [module, setModule]=useState([]);
 
 
     const fetchData =  ()=>{
@@ -17,9 +18,19 @@ const  Questions = (props) => {
             .catch(error=>console.log(error.response));
     };
 
+    /* function to fetch modules*/
+
+    const fetchModules = ()=>{
+        axios.get("http://127.0.0.1:8000/api/modules")
+            .then(response=>response.data['hydra:member'])
+            .then(data=>setModule((data)))
+            .catch(error=>console.warn(error.response));
+    }
+
    useEffect(   ()=>{
 
        fetchData();
+       fetchModules();
     },[]);
 
     const  [postQuestion, setPostQuestion] = useState({
@@ -164,9 +175,11 @@ const  Questions = (props) => {
                                         <select className="form-select" id="moduleQuestion"
                                                 aria-label="Default select example">
                                             <option selected>Sélectionnez un module</option>
-                                            <option value="1">Symfony</option>
-                                            <option value="2">Laravel</option>
-                                            <option value="3">React</option>
+                                            {module.map(m =>
+                                                <option key={m.id} value={m.id}>{m.name}</option>
+                                            )}
+
+
                                         </select>
                                     </div>
                                 </div>

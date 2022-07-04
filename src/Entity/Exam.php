@@ -69,6 +69,12 @@ class Exam
      */
     private $questions;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Module::class, inversedBy="exams")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $module;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -123,6 +129,18 @@ class Exam
     public function removeQuestion(Question $question): self
     {
         $this->questions->removeElement($question);
+
+        return $this;
+    }
+
+    public function getModule(): ?Module
+    {
+        return $this->module;
+    }
+
+    public function setModule(?Module $module): self
+    {
+        $this->module = $module;
 
         return $this;
     }

@@ -84,6 +84,13 @@ class Question
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Module::class, inversedBy="questions")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"module_read"})
+     */
+    private $module;
+
     public function __construct()
     {
         $this->exams = new ArrayCollection();
@@ -165,6 +172,18 @@ class Question
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getModule(): ?Module
+    {
+        return $this->module;
+    }
+
+    public function setModule(?Module $module): self
+    {
+        $this->module = $module;
 
         return $this;
     }
