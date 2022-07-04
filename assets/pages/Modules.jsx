@@ -1,19 +1,22 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Field from "../components/forms/Field";
+import {toast} from "react-toastify";
 
 
 
 
 const Modules = (props) => {
-
-    const [modules,setmodule]=useState([]);
-    useEffect(()=>{
+    const fetchModules =()=>{
         axios.get("http://127.0.0.1:8000/api/modules")
             .then(response=>response.data['hydra:member'])
             .then(data=>setmodule(data))
             .catch(error=>console.log(error.response));
-    })
+    }
+    const [modules,setmodule]=useState([]);
+    useEffect(()=>{
+        fetchModules();
+    },[])
     /************ajout de module**********/
     const  [postModule, setPostModule] = useState({
         name: "",
@@ -33,12 +36,12 @@ const Modules = (props) => {
         try {
             const response =  await axios.post("http://127.0.0.1:8000/api/modules", postModule)
             $('#addmodal').modal('toggle');
-            console.log(response.data)
+            fetchModules();
+            toast.success("Module ajouté avec succes 😁");
         }catch (error){
             console.log(error.response)
         }
     }
-
     /*****************************************************/
 
     /*************edit module*****************************/
@@ -64,28 +67,38 @@ const Modules = (props) => {
         let id = EditModule.id;
         try {
             const response= await axios.put("http://127.0.0.1:8000/api/modules/"+id,EditModule)
-            alert("module updated succesfully");
             $('#editmodal').modal('toggle');
+            toast.success("Module Modifié avec succes 😁");
+            fetchModules();
         }catch (error)
         {
-            alert("erreur est survenue");
+            toast.error("Une erreur est survenue!!");
         }
     }
     /*****************************************************/
     function deleteM(id)
     {
         const token = window.localStorage.getItem("authToken");
-        fetch(`http://localhost:8000/api/modules/${id}`,{
-            method:'DELETE',
-            headers : {
-                'Accept': 'application/json',
-                'Authorization': "Bearer "+ token
-            }
-        }).then((res)=>
-            res.json().then((response)=>
-            console.log(response))
-        )
+        try {
+            axios.delete(`http://localhost:8000/api/modules/${id}`,{
+                    headers:{
+                        'Accept': 'application/json',
+                        'Authorization': "Bearer "+ token
+                    }
+                }
+            )
+            fetchModules();
+            toast.success("Module Suprimé avec succes 😁");
+            fetchModules();
+        }
+        catch (error)
+        {
+            toast.error("Une erreur est survenue !!!");
+        }
     }
+
+    /***************Show states************************/
+    const [idshow , setidshow]= useState("");
   return(
       <div className="container-xxl flex-grow-1 container-p-y">
           <div className="card">
@@ -114,7 +127,7 @@ const Modules = (props) => {
                               <td>
                                   <div className="dropdown">
                                       <div className="row ">
-                                          <button type="button" className="col btn btn-outline-success m-2" data-bs-toggle="modal" data-bs-target="#showModal">Show</button>
+                                          <button type="button" className="col btn btn-outline-success m-2" data-bs-toggle="modal" data-bs-target="#showModal" onClick={()=>changeOnclick(m.id,m.name,m.description)}>Show</button>
                                           <button type="button" className="col btn btn-outline-warning m-2" data-bs-toggle="modal" data-bs-target="#editmodal" onClick={()=>changeOnclick(m.id,m.name,m.description)} >Edit</button>
                                           <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteM(m.id)}>Delete</button>
                                       </div>
@@ -127,7 +140,7 @@ const Modules = (props) => {
               </div>
           </div>
           {/*modal add*/}
-          <div class="modal fade" id="addmodal" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="addmodal" tabindex="-1" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
                       <div class="modal-header">
@@ -177,7 +190,7 @@ const Modules = (props) => {
           {/*end modal add*/}
 
           {/*edit modal */}
-          <div className="modal fade" id="editmodal" tabIndex="-1" aria-hidden="true">
+            <div className="modal fade" id="editmodal" tabIndex="-1" aria-hidden="true">
               <div className="modal-dialog modal-dialog-centered" role="document">
                   <div className="modal-content">
                       <div className="modal-header">
@@ -226,12 +239,12 @@ const Modules = (props) => {
           </div>
           {/*end edit modal*/}
 
-          {modules.map(m =>
+          {/*show modal*/}
               <div class="modal fade" id="showModal" data-bs-backdrop="static" tabindex="-1">
                   <div class="modal-dialog">
                       <form class="modal-content">
                           <div class="modal-header">
-                              <h5 class="modal-title" id="showModal">Numero de module : 6</h5>
+                              <h5 class="modal-title" id="showModal">Numero de module : {EditModule.id}</h5>
                               <button
                                   type="button"
                                   class="btn-close"
@@ -242,8 +255,8 @@ const Modules = (props) => {
                           <div class="modal-body">
                               <div className="card text-center mb-3">
                                   <div className="card-body">
-                                      <h1 className="card-title">Symfony</h1>
-                                      <p className="card-text">framework Php</p>
+                                      <h1 className="card-title">{EditModule.name}</h1>
+                                      <p className="card-text">{EditModule.description}</p>
                                   </div>
                               </div>
                           </div>
@@ -255,7 +268,7 @@ const Modules = (props) => {
                       </form>
                   </div>
               </div>
-          )}
+          {/*end show modal*/}
       </div>
   )
 }
