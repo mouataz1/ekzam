@@ -86,12 +86,12 @@ class Question
 
     /**
      * @ORM\ManyToOne(targetEntity=Module::class, inversedBy="questions")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE)
-     * @Groups({"module_read","questions_read"})
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"module_read"})
      * @Assert\NotBlank(message="module is required")
      */
 
-    
+     
     private $module;
 
     public function __construct()
