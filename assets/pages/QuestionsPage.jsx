@@ -9,12 +9,11 @@ const  Questions = (props) => {
     const [modules, setModule]=useState([]);
 
 
-    const fetchData =  ()=>{
+    const fetchData = ()=>{
         axios.get("http://127.0.0.1:8000/api/questions")
-            .then(response=>response.data['hydra:member'])
-            .then(data=>setquestion(data))
-
-            .catch(error=>console.log(error.response));
+        .then(response=>response.data["hydra:member"])
+        .then(data=>setquestion(data))
+        .catch(error=>console.warn(error.response));
     };
 
     /* function to fetch modules*/
@@ -25,13 +24,12 @@ const  Questions = (props) => {
             .then(data=>setModule((data)))
             .catch(error=>console.warn(error.response));
     }
-
-
+    
    useEffect(   ()=>{
-
        fetchData();
        fetchModules();
-    },[]);
+       console.log(question);
+    },[question]);
 
     const  [postQuestion, setPostQuestion] = useState({
         code: "",
@@ -64,25 +62,68 @@ const  Questions = (props) => {
 
         }catch (error){
             console.log(error.response)
-            console.log(postQuestion.module);
         }
     }
-    function deleteq(id)
+    /**********************edit******************/
+    const  [editQuestion, setEditQuestion] = useState({
+        id:"",
+        code: "",
+        dificulty: "",
+        description: "",
+        module:""
+    })
+
+    const changeOnclick = (id,code,dificulty,description,module)=>
     {
-        const token = window.localStorage.getItem("authToken");
-        fetch(`http://localhost:8000/api/questions/${id}`,{
-            method:'DELETE',
-            headers : {
-                'Accept': 'application/json',
-                'Authorization': "Bearer "+ token
-            }
-        }).then((res)=>
-            res.json().then((response)=>
-                console.log(response))
-        )
-        fetchData();
-        toast.success("Question suprimé avec success 🗑");
+        setEditQuestion({
+            id:id,
+            code:code,
+            dificulty: dificulty,
+            description: description,
+            module: module
+        })
     }
+    const handleEditChange = ({currentTarget}) =>{
+        const {name, value} = currentTarget;
+        setEditQuestion({...editQuestion, [name]: value});
+    };
+
+
+    const handleEditSubmit = async (event)=>{
+        event.preventDefault();
+        let id = editQuestion.id;
+        try {
+            const response= await axios.put("http://127.0.0.1:8000/api/questions/"+id,editQuestion)
+            $('#editmodal').modal('toggle');
+            toast.success("Module Modifié avec succes 😁");
+            fetchModules();
+        }catch (error)
+        {
+            toast.error("Une erreur est survenue!!");
+        }
+    }
+    /*************************************************************/
+
+   const deleteq =(id)=>
+   {
+       const token = window.localStorage.getItem("authToken");
+       try {
+           axios.delete(`http://localhost:8000/api/questions/${id}`,{
+                   headers:{
+                       'Accept': 'application/json',
+                       'Authorization': "Bearer "+ token
+                   }
+               }
+           )
+           fetchData();
+           toast.success("Question Suprimé avec succes 😁");
+           fetchData();
+       }
+       catch (error)
+       {
+           toast.error("Une erreur est survenue !!!");
+       }
+   }
     
     return(
 
@@ -112,11 +153,11 @@ const  Questions = (props) => {
                                 <td>
                                     <span className="badge bg-label-danger me-1">{q.dificulty}</span>
                                 </td>
-                                <td>Symfony</td>
+                                <td>{q.module}</td>
                                 <td>
                                     <div className="dropdown">
                                         <div className="row ">
-                                            <button type="button" className="col btn btn-outline-warning m-2">Edit</button>
+                                            <button type="button" className="col btn btn-outline-warning m-2" data-bs-toggle="modal" data-bs-target="#editmodal" onClick={()=>changeOnclick(q.id,q.code,q.description,q.dificulty,q.module.id)}>Edit</button>
                                             <button type="button" className="col btn btn-outline-danger m-2" onClick={()=>deleteq(q.id)}>Delete</button>
                                         </div>
                                     </div>
@@ -181,8 +222,6 @@ const  Questions = (props) => {
                                             {modules.map(m =>
                                                 <option key={m.id} value={m.id}>{m.name}</option>
                                             )}
-
-
                                         </select>
                                     </div>
                                 </div>
@@ -206,7 +245,7 @@ const  Questions = (props) => {
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalCenterTitle">Nouvelle question</h5>
+                            <h5 class="modal-title" id="modalCenterTitle">Modifier question</h5>
                             <button
                                 type="button"
                                 class="btn-close"
@@ -215,24 +254,24 @@ const  Questions = (props) => {
 
                             </button>
                         </div>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleEditSubmit}>
                             <div class="modal-body">
-
+                                <input type="hidden" name="id" value={editQuestion.id} onChange={handleEditChange}/>
                                 <div class="row g-2">
                                     <Field
                                         name="code"
                                         label="Code de question"
                                         placeholder="code de la question"
-                                        value={postQuestion.code}
-                                        onChange={handleChange}
+                                        value={editQuestion.code}
+                                        onChange={handleEditChange}
                                         error={errors.code}
                                     />
                                     <Field
                                         name="dificulty"
                                         label="Dificulté"
                                         placeholder="HARD, EASY, MEDIUM"
-                                        value={postQuestion.dificulty}
-                                        onChange={handleChange}
+                                        value={editQuestion.dificulty}
+                                        onChange={handleEditChange}
                                         error={errors.dificulty}
                                     />
                                 </div>
@@ -241,11 +280,24 @@ const  Questions = (props) => {
                                         name="description"
                                         label="Question"
                                         placeholder="la question ?"
-                                        value={postQuestion.description}
-                                        onChange={handleChange}
+                                        value={editQuestion.description}
+                                        onChange={handleEditChange}
                                         error={errors.description}
                                     />
                                 </div>
+                                <div className="row">
+                                    <div className="mb-3">
+                                        <label htmlFor="exampleFormControlSelect1" className="form-label">Module</label>
+                                        <select className="form-select" id="moduleeditQuestion"
+                                                name="module" aria-label="Default select example" value={editQuestion.module} onChange={handleEditChange} onError={errors.moduleerror} required>
+                                            <option selected value="">Sélectionnez un module</option>
+                                            {modules.map(m =>
+                                                <option key={m.id} value={m.id}>{m.name}</option>
+                                            )}
+                                        </select>
+                                    </div>
+                                </div>
+
 
                             </div>
                             <div class="modal-footer">

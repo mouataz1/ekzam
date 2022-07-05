@@ -1,8 +1,77 @@
-import React from "react";
+import React, {useState,useEffect} from "react";
 import Field from "../components/forms/Field";
+import axios from "axios";
+import {toast} from "react-toastify";
 
 const Teachers = () => {
-  return(
+    const [teachers,setTeachers] = useState([]);
+    const [teacher,setTeacher] = useState({
+        firstName:"",
+        lastName:"teacher",
+        email:"",
+        password:"teacher2022",
+        phone:"",
+        module:""
+    });
+    const handleChange = ({currentTarget}) =>{
+        const {name, value} = currentTarget;
+        setTeacher({...teacher, [name]: value});
+    };
+    const handleSubmit = async (event) =>{
+        event.preventDefault();
+        try {
+            const response =  await axios.post("http://127.0.0.1:8000/api/users", {...teacher, module:`/api/users/${teacher.module}`})
+            $('#addmodal').modal('toggle');
+            //call fetchData function here !!
+            fetchTeachers();
+            toast.success("Professeur ajouté avec succes 😁");
+
+        }catch (error){
+            console.log(error.response)
+        }
+    }
+
+    /***************************edit ********************************/
+    const [editTeacher,setEditTeacher]= useState({
+        firstName:"",
+        lastName:"teacher",
+        email:"",
+        phone:"",
+        module:""
+    });
+    const changeOnclick = (id,firstName,lastName,email,phone,module)=>
+    {
+        setEditModule({
+            id:id,
+            firstName:firstName,
+            lastName:"teacher",
+            email:email,
+            phone:phone,
+            module:module,
+        })
+    }
+
+    /****************************************************************/
+    const [modules, setModule]=useState([]);
+    const fetchModules = ()=>{
+        axios.get("http://127.0.0.1:8000/api/modules")
+            .then(response=>response.data['hydra:member'])
+            .then(data=>setModule((data)))
+            .catch(error=>console.warn(error.response));
+    };
+    const fetchTeachers =()=>{
+        axios.get("http://127.0.0.1:8000/api/users")
+            .then(response=>response.data['hydra:member'])
+            .then(data=>setTeachers(data))
+            .catch(error=>console.log(error.response));
+    }
+    useEffect(()=>{
+        fetchModules();
+        fetchTeachers();
+    },[]);
+    /********************************************************************/
+
+    return(
       <div className="container-xxl flex-grow-1 container-p-y">
           <div className="card">
               <h5 className="card-header d-flex justify-content-between align-items-center">Teachers List
@@ -12,24 +81,25 @@ const Teachers = () => {
                   <table className="table mb-5 p-5">
                       <thead>
                       <tr>
-                          <th>Full Name</th>
+                          <th>Nom Complet</th>
                           <th>Email</th>
                           <th>Phone</th>
-                          <th>Teaching subject</th>
+                          <th> Nombre Modules</th>
                           <th>Actions</th>
                       </tr>
                       </thead>
                       <tbody className="table-border-bottom-0">
-                          <tr >
+                      {teachers.map(t =>
+                          <tr key={t.id} >
                               <td><i className="fab fa-angular fa-lg text-danger me-3"/>
-                                  <strong>Mouataz Hakkou</strong>
+                                  <strong>{t.firstName}</strong>
                               </td>
-                              <td>moataz.hakkou@gmail.com</td>
+                              <td>{t.email}</td>
                               <td>
-                                  <span className="">+212 650 53 65 13</span>
+                                  <span className="">{t.phone}</span>
                               </td>
                               <td>
-                                  <span>Symfony full stack</span>
+                                  <span>{t.modules.length}</span>
                               </td>
                               <td>
                                   <div className="dropdown">
@@ -41,6 +111,7 @@ const Teachers = () => {
                                   </div>
                               </td>
                           </tr>
+                      )}
                       </tbody>
                   </table>
               </div>
@@ -58,21 +129,23 @@ const Teachers = () => {
                               aria-label="Close">
                           </button>
                       </div>
-                      <form onSubmit="">
+                      <form onSubmit={handleSubmit}>
                           <div class="modal-body">
 
                               <div class="row g-2">
                                   <Field
-                                      name="FullName"
+                                      name="firstName"
                                       label="Full name"
                                       placeholder="Full Name"
-
+                                      value={teacher.firstName}
+                                      onChange={handleChange}
                                   />
                                   <Field
-                                      name="Email"
+                                      name="email"
                                       label="Email"
                                       placeholder="XXXXXX@gmail.com"
-
+                                      value={teacher.email}
+                                      onChange={handleChange}
                                   />
                               </div>
                               <div className="row g-2">
@@ -80,16 +153,19 @@ const Teachers = () => {
                                       name="phone"
                                       label="Phone Number"
                                       placeholder="063XXXXXXX"
+                                      value={teacher.phone}
+                                      onChange={handleChange}
 
                                   />
                                   <div className="mb-3">
                                       <label htmlFor="exampleFormControlSelect1" className="form-label">Module</label>
                                       <select className="form-select" id="moduleQuestion"
-                                              aria-label="Default select example" name="teacher">
+                                              aria-label="Default select example" name="module" value={teacher.module}
+                                              onChange={handleChange}>
                                           <option selected>Sélectionnez un module</option>
-                                          <option value="1">Symfony</option>
-                                          <option value="2">Laravel</option>
-                                          <option value="3">React</option>
+                                          {modules.map(m =>
+                                              <option key={m.id} value={m.id}>{m.name}</option>
+                                          )}
                                       </select>
                                   </div>
                               </div>
@@ -105,6 +181,74 @@ const Teachers = () => {
               </div>
           </div>
           {/*end modal add*/}
+
+          {/******************edit modal*********************/}
+          <div className="modal fade" id="addmodal" tabIndex="-1" aria-hidden="true">
+              <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                      <div className="modal-header">
+                          <h5 className="modal-title" id="modalCenterTitle">Modifier Teacher</h5>
+                          <button
+                              type="button"
+                              className="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close">
+                          </button>
+                      </div>
+                      <form onSubmit={handleEditSubmit}>
+                          <div className="modal-body">
+
+                              <div className="row g-2">
+                                  <Field
+                                      name="firstName"
+                                      label="Full name"
+                                      placeholder="Full Name"
+                                      value={teacher.firstName}
+                                      onChange={handleChange}
+                                  />
+                                  <Field
+                                      name="email"
+                                      label="Email"
+                                      placeholder="XXXXXX@gmail.com"
+                                      value={teacher.email}
+                                      onChange={handleChange}
+                                  />
+                              </div>
+                              <div className="row g-2">
+                                  <Field
+                                      name="phone"
+                                      label="Phone Number"
+                                      placeholder="063XXXXXXX"
+                                      value={teacher.phone}
+                                      onChange={handleChange}
+
+                                  />
+                                  <div className="mb-3">
+                                      <label htmlFor="exampleFormControlSelect1" className="form-label">Module</label>
+                                      <select className="form-select" id="moduleQuestion"
+                                              aria-label="Default select example" name="module" value={teacher.module}
+                                              onChange={handleChange}>
+                                          <option selected>Sélectionnez un module</option>
+                                          {modules.map(m =>
+                                              <option key={m.id} value={m.id}>{m.name}</option>
+                                          )}
+                                      </select>
+                                  </div>
+                              </div>
+                              <div className="row">
+                              </div>
+                          </div>
+                          <div className="modal-footer">
+                              <button type="button" className="btn btn-outline-secondary"
+                                      data-bs-dismiss="modal">Close
+                              </button>
+                              <button type="submit" className="btn btn-primary">Modifier</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+          {/******************************************************/}
           <div className="modal fade" id="showModal" data-bs-backdrop="static" tabIndex="-1">
               <div className="modal-dialog">
                   <form className="modal-content">
@@ -153,6 +297,7 @@ const Teachers = () => {
                   </form>
               </div>
           </div>
+          {/*************************************************/}
       </div>
   );
 }
