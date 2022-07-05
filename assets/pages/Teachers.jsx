@@ -33,13 +33,13 @@ const Teachers = () => {
 
     /***************************edit ********************************/
     const [editTeacher,setEditTeacher]= useState({
+        id:"",
         firstName:"",
         lastName:"teacher",
         email:"",
         phone:"",
-        module:""
     });
-    const changeOnclick = (id,firstName,lastName,email,phone,module)=>
+    const changeOnclick = (id,firstName,lastName,email,phone)=>
     {
         setEditTeacher({
             id:id,
@@ -47,8 +47,24 @@ const Teachers = () => {
             lastName:"teacher",
             email:email,
             phone:phone,
-            module:module,
         })
+    }
+    const handleEditChange = ({currentTarget}) =>{
+        const {name, value} = currentTarget;
+        setEditTeacher({...editTeacher, [name]: value});
+    };
+    const handleEditSubmit = async (event)=>{
+        event.preventDefault();
+        let id = editTeacher.id;
+        try {
+            const response= await axios.put("http://127.0.0.1:8000/api/users/"+id,editTeacher)
+            $('#editmodal').modal('toggle');
+            toast.success("Professeur Modifié avec succes 😁");
+            fetchModules();
+        }catch (error)
+        {
+            toast.error("Une erreur est survenue!!");
+        }
     }
 
     /****************************************************************/
@@ -104,8 +120,8 @@ const Teachers = () => {
                               <td>
                                   <div className="dropdown">
                                       <div className="row ">
-                                          <button type="button" className="col btn btn-outline-success m-2" data-bs-toggle="modal" data-bs-target="#showModal" onClick={()=>changeOnclick()}>Show</button>
-                                          <button type="button" className="col btn btn-outline-warning m-2">Edit</button>
+                                          <button type="button" className="col btn btn-outline-success m-2" data-bs-toggle="modal" data-bs-target="#showModal" onClick={()=>changeOnclick(t.id,t.firstName,t.lastName,t.email,t.phone)}>Show</button>
+                                          <button type="button" className="col btn btn-outline-warning m-2" data-bs-toggle="modal" data-bs-target="#editmodal" onClick={()=>changeOnclick(t.id,t.firstName,t.lastName,t.email,t.phone)}>Edit</button>
                                           <button type="button" className="col btn btn-outline-danger m-2">Delete</button>
                                       </div>
                                   </div>
@@ -183,7 +199,7 @@ const Teachers = () => {
           {/*end modal add*/}
 
           {/******************edit modal*********************/}
-          <div className="modal fade" id="addmodal" tabIndex="-1" aria-hidden="true">
+          <div className="modal fade" id="editmodal" tabIndex="-1" aria-hidden="true">
               <div className="modal-dialog modal-dialog-centered" role="document">
                   <div className="modal-content">
                       <div className="modal-header">
@@ -197,21 +213,21 @@ const Teachers = () => {
                       </div>
                       <form onSubmit={handleEditSubmit}>
                           <div className="modal-body">
-
+                              <input type="hidden" name="id" value={editTeacher.id} onChange={handleEditChange}/>
                               <div className="row g-2">
                                   <Field
                                       name="firstName"
                                       label="Full name"
                                       placeholder="Full Name"
                                       value={editTeacher.firstName}
-                                      onChange={handleChange}
+                                      onChange={handleEditChange}
                                   />
                                   <Field
                                       name="email"
                                       label="Email"
                                       placeholder="XXXXXX@gmail.com"
                                       value={editTeacher.email}
-                                      onChange={handleChange}
+                                      onChange={handleEditChange}
                                   />
                               </div>
                               <div className="row g-2">
@@ -220,14 +236,14 @@ const Teachers = () => {
                                       label="Phone Number"
                                       placeholder="063XXXXXXX"
                                       value={editTeacher.phone}
-                                      onChange={handleChange}
+                                      onChange={handleEditChange}
 
                                   />
                                   <div className="mb-3">
                                       <label htmlFor="exampleFormControlSelect1" className="form-label">Module</label>
                                       <select className="form-select" id="moduleQuestion"
                                               aria-label="Default select example" name="module" value={editTeacher.module}
-                                              onChange={handleChange}>
+                                              onChange={handleEditChange}>
                                           <option selected>Sélectionnez un module</option>
                                           {modules.map(m =>
                                               <option key={m.id} value={m.id}>{m.name}</option>
@@ -253,7 +269,7 @@ const Teachers = () => {
               <div className="modal-dialog">
                   <form className="modal-content">
                       <div className="modal-header">
-                          <h5 className="modal-title" id="showModal">Profile de Mouataz Hakkou</h5>
+                          <h5 className="modal-title" id="showModal">Profile de {editTeacher.firstName}</h5>
                           <button
                               type="button"
                               className="btn-close"
@@ -275,16 +291,13 @@ const Teachers = () => {
                                       />
                                   </div>
                                   <div className="row mb-3">
-                                      <h5>Mouataz Hakkou</h5>
+                                      <h5>{editTeacher.firstName}</h5>
                                   </div>
                                   <div className="row mb-3">
-                                      <h6>moataz.hakkou@gmail.com</h6>
+                                      <h6>{editTeacher.email}</h6>
                                   </div>
                                   <div className="row mb-3">
-                                      <h6>+212 650 53 65 13</h6>
-                                  </div>
-                                  <div className="row mb-3">
-                                      <h6>Symfony full stack</h6>
+                                      <h6>{editTeacher.phone}</h6>
                                   </div>
                               </div>
                           </div>
