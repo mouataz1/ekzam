@@ -1,6 +1,47 @@
-import React from "react";
+import React, {useEffect ,useState} from "react";
+import axios from "axios";
 
 const HomePage = (props) => {
+    const [question,setquestion]= useState([]);
+    const [modules, setModule]=useState([]);
+    const [exams,setExams] = useState([]);
+    const [teachers,setTeachers] = useState([]);
+
+    const fetchExams = ()=>{
+        axios.get("http://127.0.0.1:8000/api/exams")
+            .then(response=>response.data['hydra:member'])
+            .then(data=>setExams(data))
+            .catch(error=>console.log(error.response));
+
+    }
+    const fetchTeachers =()=>{
+        axios.get("http://127.0.0.1:8000/api/users")
+            .then(response=>response.data['hydra:member'])
+            .then(data=>setTeachers(data))
+            .catch(error=>console.log(error.response));
+    }
+    const fetchData =  ()=>{
+        axios.get("http://127.0.0.1:8000/api/questions")
+            .then(response=>response.data['hydra:member'])
+            .then(data=>setquestion(data))
+            .catch(error=>console.log(error.response));
+    };
+
+    /* function to fetch modules*/
+
+    const fetchModules = ()=>{
+        axios.get("http://127.0.0.1:8000/api/modules")
+            .then(response=>response.data['hydra:member'])
+            .then(data=>setModule((data)))
+            .catch(error=>console.warn(error.response));
+
+    };
+    useEffect(   ()=>{
+        fetchData();
+        fetchModules();
+        fetchExams();
+        fetchTeachers();
+    },[]);
     return(
         <div className="container-xxl flex-grow-1 container-p-y">
             <div className="layout-demo-wrapper">
@@ -14,7 +55,7 @@ const HomePage = (props) => {
                                             <i className="bx bxs-folder-open bx-lg text-center"></i>
                                         </div>
                                     </div>
-                                    <h1> 4 modules</h1>
+                                    <h1> {modules.length} modules</h1>
                                 </div>
                             </div>
                         </div>
@@ -26,7 +67,7 @@ const HomePage = (props) => {
                                             <i className="bx bx-question-mark bx-lg text-center"></i>
                                         </div>
                                     </div>
-                                    <h1> 5 Questions </h1>
+                                    <h1> {question.length} Questions </h1>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +79,7 @@ const HomePage = (props) => {
                                             <i className="bx bx-clipboard bx-lg text-center"></i>
                                         </div>
                                     </div>
-                                    <h1> 3 exams </h1>
+                                    <h1> {exams.length} exams </h1>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +91,7 @@ const HomePage = (props) => {
                                             <i className="bx bx-user-voice bx-lg text-center"></i>
                                         </div>
                                     </div>
-                                    <h1> 1 Teachers </h1>
+                                    <h1> {teachers.length} Teachers </h1>
                                 </div>
                             </div>
                         </div>

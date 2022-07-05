@@ -100,7 +100,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $phone;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Module::class, mappedBy="teacher")
+     * @ORM\ManyToMany(targetEntity=Module::class, mappedBy="teacher" , fetch="EAGER")
      * @Groups({"users_read"})
      */
     private $modules;

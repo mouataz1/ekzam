@@ -69,13 +69,14 @@ class Module
     private $niveaux;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="modules")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="modules", fetch="EAGER")
      * @Groups({"module_read", "questions_read"})
      */
     private $teacher;
 
     /**
      * @ORM\OneToMany(targetEntity=Question::class, mappedBy="module")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @Groups({"questions_read"})
      */
     private $questions;
