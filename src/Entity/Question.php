@@ -87,7 +87,7 @@ class Question
     /**
      * @ORM\ManyToOne(targetEntity=Module::class, inversedBy="questions")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     * @Groups({"questions_read"})
+     * @Groups({"module_read"})
      */
     private $module;
 

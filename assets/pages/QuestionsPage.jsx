@@ -28,8 +28,7 @@ const  Questions = (props) => {
    useEffect(   ()=>{
        fetchData();
        fetchModules();
-       console.log(question);
-    },[question]);
+    },[]);
 
     const  [postQuestion, setPostQuestion] = useState({
         code: "",
@@ -153,7 +152,7 @@ const  Questions = (props) => {
                                 <td>
                                     <span className="badge bg-label-danger me-1">{q.dificulty}</span>
                                 </td>
-                                <td>{q.module}</td>
+                                <td>Symfony</td>
                                 <td>
                                     <div className="dropdown">
                                         <div className="row ">

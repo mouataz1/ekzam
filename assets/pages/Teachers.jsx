@@ -41,7 +41,7 @@ const Teachers = () => {
     });
     const changeOnclick = (id,firstName,lastName,email,phone,module)=>
     {
-        setEditModule({
+        setEditTeacher({
             id:id,
             firstName:firstName,
             lastName:"teacher",
@@ -104,7 +104,7 @@ const Teachers = () => {
                               <td>
                                   <div className="dropdown">
                                       <div className="row ">
-                                          <button type="button" className="col btn btn-outline-success m-2" data-bs-toggle="modal" data-bs-target="#showModal">Show</button>
+                                          <button type="button" className="col btn btn-outline-success m-2" data-bs-toggle="modal" data-bs-target="#showModal" onClick={()=>changeOnclick()}>Show</button>
                                           <button type="button" className="col btn btn-outline-warning m-2">Edit</button>
                                           <button type="button" className="col btn btn-outline-danger m-2">Delete</button>
                                       </div>
@@ -203,14 +203,14 @@ const Teachers = () => {
                                       name="firstName"
                                       label="Full name"
                                       placeholder="Full Name"
-                                      value={teacher.firstName}
+                                      value={editTeacher.firstName}
                                       onChange={handleChange}
                                   />
                                   <Field
                                       name="email"
                                       label="Email"
                                       placeholder="XXXXXX@gmail.com"
-                                      value={teacher.email}
+                                      value={editTeacher.email}
                                       onChange={handleChange}
                                   />
                               </div>
@@ -219,14 +219,14 @@ const Teachers = () => {
                                       name="phone"
                                       label="Phone Number"
                                       placeholder="063XXXXXXX"
-                                      value={teacher.phone}
+                                      value={editTeacher.phone}
                                       onChange={handleChange}
 
                                   />
                                   <div className="mb-3">
                                       <label htmlFor="exampleFormControlSelect1" className="form-label">Module</label>
                                       <select className="form-select" id="moduleQuestion"
-                                              aria-label="Default select example" name="module" value={teacher.module}
+                                              aria-label="Default select example" name="module" value={editTeacher.module}
                                               onChange={handleChange}>
                                           <option selected>Sélectionnez un module</option>
                                           {modules.map(m =>
