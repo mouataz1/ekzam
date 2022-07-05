@@ -39,6 +39,19 @@ class QuestionRepository extends ServiceEntityRepository
         }
     }
 
+    public function findQstRelatedToModule($mod,$dif,$nbr)
+    {
+        return $this->createQueryBuilder('q')
+            ->innerJoin('q.module','m','WITH','m.id = :mod')
+            ->andWhere('q.dificulty = :dif')
+            ->setParameter('dif', $dif)
+            ->setParameter('mod',$mod)
+            ->setMaxResults($nbr)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return Question[] Returns an array of Question objects
 //     */

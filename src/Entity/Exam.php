@@ -65,7 +65,7 @@ class Exam
 
     /**
      * @ORM\ManyToMany(targetEntity=Question::class, inversedBy="exams")
-     * @Groups({"exam_read"})
+     * @Groups({"exam_read", "questions_read"})
      */
     private $questions;
 

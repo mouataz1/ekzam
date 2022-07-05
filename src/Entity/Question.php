@@ -39,7 +39,7 @@ class Question
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"questions_read", "users_read"})
+     * @Groups({"questions_read", "users_read", "exam_read"})
      * @Assert\NotBlank(message="code is required")
      * @Assert\Length(
      *      min = 1,
@@ -52,7 +52,7 @@ class Question
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"questions_read", "users_read"})
+     * @Groups({"questions_read", "users_read", "exam_read"})
      * @Assert\NotBlank(message="description is required")
      * @Assert\Length(
      *      min = 1,
@@ -89,6 +89,8 @@ class Question
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @Groups({"module_read"})
      */
+
+     
     private $module;
 
     public function __construct()
