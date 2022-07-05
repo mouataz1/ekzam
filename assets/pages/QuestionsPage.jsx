@@ -17,6 +17,7 @@ const  Questions = (props) => {
             .catch(error=>console.log(error.response));
     };
 
+
     /* function to fetch modules*/
 
     const fetchModules = ()=>{
@@ -35,21 +36,22 @@ const  Questions = (props) => {
 
     const  [postQuestion, setPostQuestion] = useState({
         code: "",
+        module: "",
         dificulty: "",
         description: "",
-        module:""
+
     });
 
     const [errors, setErrors] = useState({
         code: "le code est obligatoire!!",
         dificulty: "la complexité est obligatoire!!",
         description: "le contenue de la question et obligatoire!!",
-        moduleerror:"module obligatoire !!"
+        module: "le module est obligatoire"
     });
 
     const handleChange = ({currentTarget}) =>{
         const {name, value} = currentTarget;
-        setPostQuestion ({...postQuestion, [name]: value});
+        setPostQuestion() ({...postQuestion, [name]: value});
     };
 
     const handleSubmit = async (event) =>{
@@ -64,7 +66,7 @@ const  Questions = (props) => {
 
         }catch (error){
             console.log(error.response)
-            console.log(postQuestion.module);
+            console.warn(postQuestion);
         }
     }
     function deleteq(id)
@@ -175,11 +177,19 @@ const  Questions = (props) => {
                                 <div className="row">
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlSelect1" className="form-label">Module</label>
-                                        <select className="form-select" id="moduleQuestion"
-                                                name="module" aria-label="Default select example" value={postQuestion.module} onChange={handleChange} onError={errors.moduleerror} required>
-                                            <option selected value="">Sélectionnez un module</option>
+                                        <select
+                                            className="form-select"
+                                            id="moduleQuestion"
+                                            aria-label="Default select example"
+                                            value={postQuestion.module}
+                                            onChange={handleChange}
+                                            name="module"
+                                        >
+                                            <option   selected>Sélectionnez un module</option>
+
                                             {modules.map(m =>
-                                                <option key={m.id} value={m.id}>{m.name}</option>
+                                                <option key={m.id} value={ m.id }>{m.name}</option>
+
                                             )}
 
 
